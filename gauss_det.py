@@ -5,12 +5,12 @@ def det(a):
     d = Fraction(1)
     for k in range(n):
         for i in range(k, n - 1):
-            c = i
+            c = k
             while a[k][k] == 0 and c < n:
                 if a[c][k] != 0:
                     a[c], a[k] = a[k], a[c]
                 c += 1
-            if a[i][i] == 0:
+            if a[k][k] == 0:
                 return 0
             try:
                 b = a[k][k] / a[i + 1][k]
