@@ -9,6 +9,7 @@ def transpon(a):
 
 def obr_matrix(m):
     ao = []
+    n = len(m)
     e = [[Fraction(1) if i == j else Fraction(0) for i in range(n)] for j in range(n)]
     for i in range(n):
         a = deepcopy(m)
