@@ -15,7 +15,11 @@ def obr_matrix(m):
         a = deepcopy(m)
         for j in range(n):
             a[j].append(e[i][j])
-        ao.append(gauss(a))
+        st = gauss(a)
+        if st is not None:
+            ao.append(st)
+        else:
+            return None
         for row in a:
             row.pop()
     return transpon(ao)
@@ -24,5 +28,8 @@ def obr_matrix(m):
 n = int(input())
 matrix = [[Fraction(a) for a in input().split()] for i in range(n)]
 answer = obr_matrix(matrix)
-for row in answer:
-    print(*row)
+if answer is not None:
+    for row in answer:
+        print(*row)
+else:
+    print('Обратной матрицы не существует')
