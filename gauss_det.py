@@ -8,6 +8,7 @@ def det(a):
             c = k
             while a[k][k] == 0 and c < n:
                 if a[c][k] != 0:
+                    d *= -1
                     a[c], a[k] = a[k], a[c]
                 c += 1
             if a[k][k] == 0:

@@ -2,6 +2,7 @@ from fractions import Fraction
 
 
 def gauss(a):
+    n = len(a)
     for k in range(n):
         for i in range(k, n - 1):
             c = k
@@ -29,8 +30,8 @@ def gauss(a):
     return ans
 
 
-n = int(input())
-matrix = [[Fraction(a) for a in input().split()] for i in range(n)]
+m = int(input())
+matrix = [[Fraction(a) for a in input().split()] for i in range(m)]
 answer = gauss(matrix)
 if answer is not None:
     print('Ответ: ', *answer, sep='\n')
