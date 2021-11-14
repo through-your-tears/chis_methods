@@ -30,10 +30,11 @@ def gauss(a):
     return ans
 
 
-m = int(input())
-matrix = [[Fraction(a) for a in input().split()] for i in range(m)]
-answer = gauss(matrix)
-if answer is not None:
-    print('Ответ: ', *answer, sep='\n')
-else:
-    print('Решений нет или бесконечно много')
+if __name__ == '__main__':
+    m = int(input())
+    matrix = [[Fraction(a) for a in input().split()] for i in range(m)]
+    answer = gauss(matrix)
+    if answer is not None:
+        print('Ответ: ', *answer, sep='\n')
+    else:
+        print('Решений нет или бесконечно много')

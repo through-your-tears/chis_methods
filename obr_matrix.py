@@ -25,11 +25,12 @@ def obr_matrix(m):
     return transpon(ao)
 
 
-n = int(input())
-matrix = [[Fraction(a) for a in input().split()] for i in range(n)]
-answer = obr_matrix(matrix)
-if answer is not None:
-    for row in answer:
-        print(*row)
-else:
-    print('Обратной матрицы не существует')
+if __name__ == '__main__':
+    n = int(input())
+    matrix = [[Fraction(a) for a in input().split()] for i in range(n)]
+    answer = obr_matrix(matrix)
+    if answer is not None:
+        for row in answer:
+            print(*row)
+    else:
+        print('Обратной матрицы не существует')

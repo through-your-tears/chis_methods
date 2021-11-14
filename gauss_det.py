@@ -2,6 +2,7 @@ from fractions import Fraction
 
 
 def det(a):
+    n = len(a)
     d = Fraction(1)
     for k in range(n):
         for i in range(k, n - 1):
@@ -27,6 +28,7 @@ def det(a):
     return d
 
 
-n = int(input())
-matrix = [[Fraction(a) for a in input().split()] for i in range(n)]
-print(det(matrix))
+if __name__ == '__main__':
+    n = int(input())
+    matrix = [[Fraction(a) for a in input().split()] for i in range(n)]
+    print(det(matrix))
