@@ -20,11 +20,10 @@ def LU_det(a):
                     l[i][j] = (a[i][j] - s) / u[j][j]
                 except ZeroDivisionError:
                     l[i][j] = Fraction(0)
-    for row in u:
-        print(*row)
-    print()
-    for row in l:
-        print(*row)
+    det = 1
+    for i in range(n):
+        det *= u[i][i]
+    return det
 
 
 if __name__ == '__main__':
