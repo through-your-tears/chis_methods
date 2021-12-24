@@ -1,14 +1,19 @@
-from sympy import diff
 from math import *
+
+
+def newton(func, a, b):
+    x = a
+    xi = eval(func)
+    xn =
+    while abs(xn - xi) < 0.001:
+
 
 
 def main():
     inp = [float(a) for a in input().split()]
-    x, a, b = inp
+    a, b = inp
     func = input()
-    code = compile(func, '<string', 'eval')
-    eval(code)
-    dfunc = diff(func)
+    print(newton(func, a, b))
 
 
 if __name__ == '__main__':
