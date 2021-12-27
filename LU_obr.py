@@ -1,8 +1,19 @@
 from fractions import Fraction
 from copy import deepcopy
+from obr_matrix import obr_matrix
 
 
-def LU_det(a):
+def mul_matrix(a, b):
+    length = len(a)
+    result_matrix = [[0 for i in range(length)] for i in range(length)]
+    for i in range(length):
+        for j in range(length):
+            for k in range(length):
+                result_matrix[i][j] += a[i][k] * b[k][j]
+    return result_matrix
+
+
+def LU_obr(a):
     n = len(a)
     l = [[Fraction(0) for j in range(n)] for i in range(n)]
     u = deepcopy(a)
@@ -22,13 +33,14 @@ def LU_det(a):
         for i in range(k, n):
             for j in range(k - 1, n):
                 u[i][j] = u[i][j] - l[i][k - 1] * u[k - 1][j]
-    det = 1
-    for i in range(n):
-        det *= u[i][i]
-    return det
+    uo = obr_matrix(u)
+    lo = obr_matrix(l)
+    return mul_matrix(uo, lo)
 
 
 if __name__ == '__main__':
     p = int(input())
     matrix = [[Fraction(a) for a in input().split()] for i in range(p)]
-    print(LU_det(matrix))
+    res = LU_obr(matrix)
+    for row in res:
+        print(*row)
