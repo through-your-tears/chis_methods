@@ -4,6 +4,7 @@ from copy import deepcopy
 
 
 def transpon(a):
+    n = len(a)
     return [[a[j][i] for j in range(n)] for i in range(n)]
 
 
