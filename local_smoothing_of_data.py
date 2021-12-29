@@ -22,10 +22,18 @@ def least_squares_method(n, m, k, points):
 def local_smoothing_of_data(n, m, k, points):
     for i in range(n):
         if n - i > k / 2:
-            y = least_squares_method(n, m, k, points[i: i + k // 2 + 1])
+            op = points[i: i + k // 2 + 1]
+            y = least_squares_method(n, m, k, op)
+            s = 0
+            for j in range(len(y)):
+                s += op[j][0]**i * y[j]
             points[i][1] = y
         else:
-            y = least_squares_method(n, m, k, points[i:])
+            op = points[i:]
+            y = least_squares_method(n, m, k, op)
+            s = 0
+            for j in range(len(y)):
+                s += op[j][0] ** i * y[j]
             points[i][1] = y
     return points
 
