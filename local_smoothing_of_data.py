@@ -3,6 +3,7 @@ import numpy as np
 from gauss import gauss
 from fractions import Fraction
 from copy import deepcopy
+from math import *
 
 
 def least_squares_method(n, m, k, points):
@@ -16,6 +17,8 @@ def least_squares_method(n, m, k, points):
         for i in range(n):
             c += points[i][0] ** k + points[i][0]
         b[k].append(c)
+    for row in b:
+        print(*row)
     return gauss(b)
 
 
@@ -39,12 +42,16 @@ def local_smoothing_of_data(n, m, k, points):
 
 
 def main():
-    n, m, k = [int(a) for a in input().split()]
-    points = [[int(a) for a in input().split()] for i in range(n)]
-    plt.scatter(np.array([deepcopy(a[0]) for a in points]), np.array([deepcopy(a[1]) for a in points]))
+    m, k, a, b = [int(a) for a in input().split()]
+    n = b - a
+    points = []
+    func = input()
+    for x in range(a, b + 1):
+        points.append([x, eval(func)])
+    plt.plot(np.array([deepcopy(a[0]) for a in points]), np.array([deepcopy(a[1]) for a in points]))
     plt.show()
     result = local_smoothing_of_data(n, m, k, points)
-    plt.scatter(np.array([deepcopy(a[0]) for a in result]), np.array([deepcopy(a[1]) for a in result]))
+    plt.plot(np.array([deepcopy(a[0]) for a in result]), np.array([deepcopy(a[1]) for a in result]))
     plt.show()
 
 
