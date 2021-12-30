@@ -30,14 +30,14 @@ def local_smoothing_of_data(n, m, k, points):
             s = 0
             for j in range(len(y)):
                 s += op[j][0]**i * y[j]
-            points[i][1] = y
+            points[i][1] = s
         else:
             op = points[i:]
             y = least_squares_method(n, m, k, op)
             s = 0
             for j in range(len(y)):
                 s += op[j][0] ** i * y[j]
-            points[i][1] = y
+            points[i][1] = s
     return points
 
 
@@ -51,6 +51,8 @@ def main():
     plt.plot(np.array([deepcopy(a[0]) for a in points]), np.array([deepcopy(a[1]) for a in points]))
     plt.show()
     result = local_smoothing_of_data(n, m, k, points)
+    for row in result:
+        print(*row)
     plt.plot(np.array([deepcopy(a[0]) for a in result]), np.array([deepcopy(a[1]) for a in result]))
     plt.show()
 
