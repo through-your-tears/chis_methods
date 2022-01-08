@@ -37,15 +37,14 @@ def local_smoothing_of_data(n, m, k, points):
 
 
 def main():
-    m, k, a, b = [int(a) for a in input().split()]
-    n = b - a + 1
+    n, m, k, a, b = [int(a) for a in input().split()]
     points = []
     func = input()
     i = a
     while i < b + 1:
         x = Fraction(i)
         points.append([x, Fraction(eval(func))])
-        i += 0.1
+        i += (b - a) / n
     plt.plot(np.array([deepcopy(a[0]) for a in points]), np.array([deepcopy(a[1]) for a in points]))
     plt.show()
     result = local_smoothing_of_data(n, m, k, points)
