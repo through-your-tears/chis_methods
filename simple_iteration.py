@@ -7,8 +7,6 @@ def simple_iterations(a):
     c = [[(-1 * a[i][j] / a[i][i]) if i != j else float(0) for j in range(n)] for i in range(n)]
     for i in range(n):
         c[i].append(a[i][n] / a[i][i])
-    for row in c:
-        print(*row)
     x = [c[j][n] for j in range(n)]
     xp = [0 for i in range(n)]
     while max([abs(xp[i]-x[i]) for i in range(n)]) > 0.001:
@@ -17,9 +15,7 @@ def simple_iterations(a):
             xp[i] = sum([x[j] * c[i][j] for j in range(n)])
             xp[i] += c[i][n]
         x = p
-        print(max([abs(xp[i] - x[i]) for i in range(n)]))
     return xp
-
 
 
 def main():

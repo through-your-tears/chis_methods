@@ -113,51 +113,51 @@ def main():
             c.append(diff(functions[i], f'x{j}').subs(d).evalf())
         m.append(c)
     matrix = [[float(m[i][j]) for j in range(n)] for i in range(n)]
-    # a = obr_matrix(matrix)
-    # v1 = sub_vectors(v, mul_matrix_on_vector(a, va))
-    # while max([abs(x) for x in sub_vectors(v, v1)]) > eps:
-    #     v = v1
-    #     d = {f'x{j}': v[j] for j in range(n)}
-    #     m = []
-    #     va = []
-    #     for i in range(n):
-    #         va.append(functions[i].subs(d).evalf())
-    #     for i in range(n):
-    #         c = []
-    #         for j in range(n):
-    #             c.append(diff(functions[i], f'x{j}').subs(d).evalf())
-    #         m.append(c)
-    #     matrix = [[float(m[i][j]) for j in range(n)] for i in range(n)]
-    #     a = obr_matrix(matrix)
-    #     v1 = sub_vectors(v, mul_matrix_on_vector(a, va))
-    # print(v1)
-
-    va = []
-    for j in range(n):
-        va.append(functions[j].subs(d).evalf())
-    u = obr_matrix(matrix)
-    e = [[float(1) if i == j else float(0) for i in range(n)] for j in range(n)]
-    v1 = sub_vectors(v, mul_matrix_on_vector(u, va))
-    try:
-        while max([abs(x) for x in sub_vectors(v, v1)]) > eps:
-            psi = sub_matrix(e, mul_matrix(matrix, u))
-            u = add_matrix(u, mul_matrix(u, psi))
-            v = v1
-            d = {f'x{j}': v[j] for j in range(n)}
-            va.clear()
-            m = []
-            for i in range(n):
-                c = []
-                for j in range(n):
-                    c.append(diff(functions[i], f'x{j}').subs(d).evalf())
-                m.append(c)
-            matrix = [[float(m[i][j]) for j in range(n)] for i in range(n)]
+    a = obr_matrix(matrix)
+    v1 = sub_vectors(v, mul_matrix_on_vector(a, va))
+    while max([abs(x) for x in sub_vectors(v, v1)]) > eps:
+        v = v1
+        d = {f'x{j}': v[j] for j in range(n)}
+        m = []
+        va = []
+        for i in range(n):
+            va.append(functions[i].subs(d).evalf())
+        for i in range(n):
+            c = []
             for j in range(n):
-                va.append(functions[j].subs(d).evalf())
-            v1 = sub_vectors(v, mul_matrix_on_vector(u, va))
-        print(v1)
-    except TypeError:
-        print('Неправильно задано начальное разбиение или нет корней')
+                c.append(diff(functions[i], f'x{j}').subs(d).evalf())
+            m.append(c)
+        matrix = [[float(m[i][j]) for j in range(n)] for i in range(n)]
+        a = obr_matrix(matrix)
+        v1 = sub_vectors(v, mul_matrix_on_vector(a, va))
+    print(v1)
+
+    # va = []
+    # for j in range(n):
+    #     va.append(functions[j].subs(d).evalf())
+    # u = obr_matrix(matrix)
+    # e = [[float(1) if i == j else float(0) for i in range(n)] for j in range(n)]
+    # v1 = sub_vectors(v, mul_matrix_on_vector(u, va))
+    # try:
+    #     while max([abs(x) for x in sub_vectors(v, v1)]) > eps:
+    #         psi = sub_matrix(e, mul_matrix(matrix, u))
+    #         u = add_matrix(u, mul_matrix(u, psi))
+    #         v = v1
+    #         d = {f'x{j}': v[j] for j in range(n)}
+    #         va.clear()
+    #         m = []
+    #         for i in range(n):
+    #             c = []
+    #             for j in range(n):
+    #                 c.append(diff(functions[i], f'x{j}').subs(d).evalf())
+    #             m.append(c)
+    #         matrix = [[float(m[i][j]) for j in range(n)] for i in range(n)]
+    #         for j in range(n):
+    #             va.append(functions[j].subs(d).evalf())
+    #         v1 = sub_vectors(v, mul_matrix_on_vector(u, va))
+    #     print(v1)
+    # except TypeError:
+    #     print('Неправильно задано начальное разбиение или нет корней')
 
 
 if __name__ == '__main__':
