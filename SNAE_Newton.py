@@ -37,25 +37,6 @@ def transpon(a):
     return [[a[j][i] for j in range(n)] for i in range(n)]
 
 
-def obr_matrix(m):
-    ao = []
-    n = len(m)
-    e = [[float(1) if i == j else float(0) for i in range(n)] for j in range(n)]
-    for i in range(n):
-        a = deepcopy(m)
-        for j in range(n):
-            a[j].append(e[i][j])
-        st = gauss(a)
-        if st is not None:
-            ao.append(st)
-        else:
-            return None
-        for row in a:
-            row.pop()
-
-    return transpon(ao)
-
-
 def sub_vectors(a, b):
     result = []
     for i in range(len(a)):
