@@ -30,17 +30,20 @@ def adams(func, points, h, y):
 
 
 def main():
-    functions = np.array([
+    functions = [
         (
-            lambda x, y, t: x - y + 2 * sin(t),
-            lambda x, y: 2 * x - y
+            lambda x, y: y[1] - y[0] + 2 * sin(x),
+            lambda x, y: 2 * y[1] - y[0],
         ),
         (
-            lambda x, y, z: x / z,
-            lambda x, y, z: -1 * x / y
+            lambda x, y: x / y[1],
+            lambda x, y: -1 * x / y[0]
         ),
-    ])
-    anal_functons = np.array([
+    ]
+    fu = [
+        [lambda x, y: [m(x, y) for m in functions[k]]] for k in range(len(functions))
+    ]
+    anal_functons = [
         (
             lambda x: cos(x) + sin(x) + x * sin(x) - x * cos(x),
             lambda x: 3 * sin(x) - 2 * x * cos(x) + cos(x)
@@ -49,13 +52,13 @@ def main():
             lambda x: exp(x ** 2),
             lambda x: 1 / 2 * exp(x ** 2)
         )
-    ])
+    ]
     koshi_data = [
         (-10, -14.126, 10),
         (-1.5, 9.48774, 1.5)
     ]
     for i in range(len(koshi_data)):
-        eps = 0.08
+        eps = 0.1
         coords = rounge_kout(functions[i], koshi_data[i][0], koshi_data[i][0] - eps * 5, eps, koshi_data[i][0],
                        koshi_data[i][1])
         coords.reverse()
