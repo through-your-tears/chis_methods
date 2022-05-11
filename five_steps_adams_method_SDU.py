@@ -100,12 +100,26 @@ def rounge_kout(func, a, b, h, x, y):
     return coords
 
 
-def adams(functions, points, h, y):
+def adams_formula(functions, points, h, y):
     return (count_vector(functions, *points[4]) * 1901 - count_vector(functions, *points[3]) * 2774 +
             count_vector(functions, *points[2]) * 2616 - count_vector(functions, *points[1]) * 1274 +
             count_vector(functions, *points[0]) * 251) * (h / 720) + y
     # return (func(*points[4]) * 1901 - func(*points[3]) * 2774 +
     #         func(*points[2]) * 2616 - func(*points[1]) * 1274 + func(*points[0]) * 251) * (h / 720) + y
+
+
+def adams(functions, koshi_data, eps):
+    coords = rounge_kout(functions, koshi_data[0], koshi_data[0] - eps * 5, eps, koshi_data[0], koshi_data[1])
+    coords.reverse()
+    graph_coords = Vector([(koshi_data[0], koshi_data[1],)])
+    j = koshi_data[0] + eps
+    while j <= koshi_data[-1]:
+        a = adams_formula(functions, coords, eps, graph_coords[-1][-1])
+        graph_coords.append((j, a))
+        coords.append((j, a))
+        coords.pop(0)
+        j += eps
+    return graph_coords
 
 
 def main():
@@ -139,29 +153,9 @@ def main():
     )
     for i in range(len(koshi_data)):
         eps = epsilons[i]
-        coords = rounge_kout(functions[i], koshi_data[i][0], koshi_data[i][0] - eps * 5, eps, koshi_data[i][0],
-                             koshi_data[i][1])
-        coords.reverse()
-        graph_coords = Vector([(koshi_data[i][0], koshi_data[i][1],)])
-        j = koshi_data[i][0] + eps
-        while j <= koshi_data[i][-1]:
-            a = adams(functions[i], coords, eps, graph_coords[-1][-1])
-            graph_coords.append((j, a))
-            coords.append((j, a))
-            coords.pop(0)
-            j += eps
+        graph_coords = adams(functions[i], koshi_data[i], eps)
         eps /= 2
-        coords = rounge_kout(functions[i], koshi_data[i][0], koshi_data[i][0] - eps * 5, eps, koshi_data[i][0],
-                             koshi_data[i][1])
-        coords.reverse()
-        graph_coords_any = [(koshi_data[i][0], koshi_data[i][1],)]
-        j = koshi_data[i][0] + eps
-        while j <= koshi_data[i][-1]:
-            a = adams(functions[i], coords, eps, graph_coords_any[-1][-1])
-            graph_coords_any.append((j, a))
-            coords.append((j, a))
-            coords.pop(0)
-            j += eps
+        graph_coords_any = adams(functions[i], koshi_data[i], eps)
         plt.plot(np.array([deepcopy(a[0]) for a in graph_coords]),
                  np.array([deepcopy(a[1][0]) for a in graph_coords]), label=f'h = {eps * 2}')
         plt.plot(np.array([deepcopy(a[0]) for a in graph_coords]),
