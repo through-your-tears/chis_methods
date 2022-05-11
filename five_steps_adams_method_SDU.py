@@ -104,8 +104,6 @@ def adams_formula(functions, points, h, y):
     return (count_vector(functions, *points[4]) * 1901 - count_vector(functions, *points[3]) * 2774 +
             count_vector(functions, *points[2]) * 2616 - count_vector(functions, *points[1]) * 1274 +
             count_vector(functions, *points[0]) * 251) * (h / 720) + y
-    # return (func(*points[4]) * 1901 - func(*points[3]) * 2774 +
-    #         func(*points[2]) * 2616 - func(*points[1]) * 1274 + func(*points[0]) * 251) * (h / 720) + y
 
 
 def adams(functions, koshi_data, eps):
@@ -122,6 +120,15 @@ def adams(functions, koshi_data, eps):
     return graph_coords
 
 
+def find_nevyazka(graph_coords, anal_function):
+    mn = 0
+    for x in graph_coords:
+        for j in range(len(x)):
+            if abs(anal_function[j](x[0]) - x[1][j]) > mn:
+                mn = abs(anal_function[j](x[0]) - x[1][j])
+    return mn
+
+
 def main():
     functions = [
         (
@@ -133,7 +140,7 @@ def main():
             lambda t, y: -1 * t / y[0]
         ),
     ]
-    anal_functons = [
+    anal_functions = [
         (
             lambda x: cos(x) + sin(x) + x * sin(x) - x * cos(x),
             lambda x: 3 * sin(x) - 2 * x * cos(x) + cos(x)
@@ -163,22 +170,13 @@ def main():
         plt.plot(np.array([deepcopy(a[0]) for a in graph_coords_any]),
                  np.array([deepcopy(a[1]) for a in graph_coords_any]), label=f'h = {eps}')
         plt.plot(np.array([deepcopy(a[0]) for a in graph_coords_any]),
-                 np.array([anal_functons[i][0](deepcopy(a[0])) for a in graph_coords_any]), label='Точное')
+                 np.array([anal_functions[i][0](deepcopy(a[0])) for a in graph_coords_any]), label='Точное')
         plt.plot(np.array([deepcopy(a[0]) for a in graph_coords_any]),
-                 np.array([anal_functons[i][1](deepcopy(a[0])) for a in graph_coords_any]), label='Точное')
+                 np.array([anal_functions[i][1](deepcopy(a[0])) for a in graph_coords_any]), label='Точное')
         plt.legend()
         plt.show()
-        mn = 0
-        for x in graph_coords:
-            for j in range(len(x)):
-                if abs(anal_functons[i][j](x[0]) - x[1][j]) > mn:
-                    mn = abs(anal_functons[i][j](x[0]) - x[1][j])
-        n1 = mn
-        mn = 0
-        for x in graph_coords_any:
-            for j in range(len(x)):
-                if abs(anal_functons[i][j](x[0]) - x[1][j]) > mn:
-                    mn = abs(anal_functons[i][j](x[0]) - x[1][j])
+        n1 = find_nevyazka(graph_coords, anal_functions[i])
+        mn = find_nevyazka(graph_coords_any, anal_functions[i])
         print(f'''Максимальная невязка на 1 решении = {n1
         }, Максимальная невязка на 2 решении = {mn}, Отношение невязок = {n1 / mn}''')
 
