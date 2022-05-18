@@ -14,7 +14,6 @@ def shooting(functions, koshi_data_first, koshi_data_second, numeric_data, epsil
     second_shoot_f = second_shoot - numeric_data
     koshi_data = (koshi_data_first[0], Vector([koshi_data_first[1][0], koshi_data_second[1][1] - (koshi_data_second[1][1] -
                   koshi_data_first[1][1]) * second_shoot_f / (second_shoot_f - first_shoot_f)]), koshi_data_first[-1])
-    # print(koshi_data[1])
     return adams(functions, koshi_data, epsilons)
 
 
