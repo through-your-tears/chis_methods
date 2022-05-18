@@ -139,6 +139,11 @@ def main():
             lambda t, y: t / y[1],
             lambda t, y: -1 * t / y[0]
         ),
+        (
+            lambda t, y: 2 * y[0] - y[1] - y[2],
+            lambda t, y: 3 * y[0] - 2 * y[1] - 3 * y[2],
+            lambda t, y: -1 * y[0] + y[1] + 2 * y[2]
+        )
     ]
     anal_functions = [
         (
@@ -148,37 +153,44 @@ def main():
         (
             lambda x: exp(x ** 2),
             lambda x: 1 / (2 * exp(x ** 2))
+        ),
+        (
+            lambda x: 3 * exp(x),
+            lambda x: exp(x),
+            lambda x: 2 * exp(x)
         )
     ]
     koshi_data = [
         (-10, Vector([-14.126, -15.9884]), 10.01),
         (-1.5, Vector([9.48774, 0.0527]), 1.51),
+        (0, Vector([3, 1, 2]), 5.11)
     ]
     epsilons = (
         0.2,
-        0.064
+        0.064,
+        0.3
     )
     for i in range(len(koshi_data)):
         eps = epsilons[i]
         graph_coords = adams(functions[i], koshi_data[i], eps)
         eps /= 2
         graph_coords_any = adams(functions[i], koshi_data[i], eps)
-        plt.plot(np.array([deepcopy(a[0]) for a in graph_coords]),
-                 np.array([deepcopy(a[1][0]) for a in graph_coords]), label=f'h = {eps * 2}')
-        plt.plot(np.array([deepcopy(a[0]) for a in graph_coords]),
-                 np.array([deepcopy(a[1][1]) for a in graph_coords]), label=f'h = {eps * 2}')
-        plt.plot(np.array([deepcopy(a[0]) for a in graph_coords_any]),
-                 np.array([deepcopy(a[1]) for a in graph_coords_any]), label=f'h = {eps}')
-        plt.plot(np.array([deepcopy(a[0]) for a in graph_coords_any]),
-                 np.array([anal_functions[i][0](deepcopy(a[0])) for a in graph_coords_any]), label='Точное')
-        plt.plot(np.array([deepcopy(a[0]) for a in graph_coords_any]),
-                 np.array([anal_functions[i][1](deepcopy(a[0])) for a in graph_coords_any]), label='Точное')
+        for j in range(len(functions[i])):
+            plt.plot(np.array([deepcopy(a[0]) for a in graph_coords]),
+                     np.array([deepcopy(a[1][j]) for a in graph_coords]), label=f'функция {j}, h = {eps * 2}')
+        for j in range(len(functions[i])):
+            plt.plot(np.array([deepcopy(a[0]) for a in graph_coords_any]),
+                     np.array([deepcopy(a[1][j]) for a in graph_coords_any]), label=f'функция {j}, h = {eps}')
+        for j in range(len(functions[i])):
+            plt.plot(np.array([deepcopy(a[0]) for a in graph_coords_any]),
+                     np.array([anal_functions[i][0](deepcopy(a[0])) for a in graph_coords_any]),
+                     label=f' функция {j} Точное')
         plt.legend()
         plt.show()
         n1 = find_nevyazka(graph_coords, anal_functions[i])
         mn = find_nevyazka(graph_coords_any, anal_functions[i])
-        print(f'''Максимальная невязка на 1 решении = {n1
-        }, Максимальная невязка на 2 решении = {mn}, Отношение невязок = {n1 / mn}''')
+        print(f'''Максимальная погрешность на 1 решении = {n1
+        }, Максимальная погрешность на 2 решении = {mn}, Отношение погрешностей = {n1 / mn}''')
 
 
 if __name__ == '__main__':
