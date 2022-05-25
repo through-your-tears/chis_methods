@@ -7,6 +7,14 @@ import numpy as np
 from five_steps_adams_method_SDU import Vector, adams
 
 
+def find_nevyazka(graph_coords, anal_function):
+    mn = 0
+    for x in graph_coords:
+        if abs(anal_function(x[0]) - x[1][0]) > mn:
+            mn = abs(anal_function(x[0]) - x[1][0])
+    return mn
+
+
 def shooting(functions, koshi_data_first, koshi_data_second, numeric_data, epsilons):
     first_shoot = adams(functions, koshi_data_first, epsilons)[-1][-1][-1]
     second_shoot = adams(functions, koshi_data_second, epsilons)[-1][-1][-1]
@@ -39,12 +47,12 @@ def main():
     )
     koshi_data_first = (
         (0.5, Vector([1.2, 0.1]), 3.51),
-        (-8, Vector([-9.984126, 0.1]), -2.99),
+        (-8, Vector([-9.984126, 0.1]), -2.95),
         (1, Vector([12.1, 0.1]), 7.01)
     )
     koshi_data_second = (
         (0.5, Vector([1.2, 0.5]), 3.51),
-        (-8, Vector([-9.984126, 0.5]), -2.99),
+        (-8, Vector([-9.984126, 0.5]), -2.95),
         (1, Vector([12.1, 0.5]), 7.01)
     )
     numeric_data = (
@@ -54,7 +62,7 @@ def main():
     )
     epsilons = (
         0.12,
-        0.26,
+        0.24,
         0.12
     )
     for i in range(len(koshi_data_first)):
@@ -69,6 +77,10 @@ def main():
                  np.array([anal_functions[i](deepcopy(a[0])) for a in graph_coords_any]), label='Точное')
         plt.legend()
         plt.show()
+        n1 = find_nevyazka(graph_coords, anal_functions[i])
+        mn = find_nevyazka(graph_coords_any, anal_functions[i])
+        print(f'''Максимальная погрешность на 1 решении = {n1
+        }, Максимальная погрешность на 2 решении = {mn}, Отношение погрешностей = {n1 / mn}''')
 
 
 if __name__ == '__main__':
