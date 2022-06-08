@@ -1,72 +1,97 @@
 from math import *
 
-import matplotlib.pyplot as plt
-
-from gauss import gauss
+import openpyxl as xl
 
 
 def start_cond(t):
     # return t ** 2
-    return 0
+    return sin(2*pi*t)
 
 
 def border_cond_sec(t):
     # return exp(t + 1)
-    return 10*sin(t)
+    return t
 
 
 def border_cond_first_der(t):
-    return -abs(sin(t))
+    return 0
+
+
+def progonka(matrix):
+    n = len(matrix)
+    a = [-1 * matrix[0][1] / matrix[0][0]]
+    b = [matrix[0][n] / matrix[0][0]]
+    for i in range(1, n):
+        y = matrix[i][i] + matrix[i][i - 1] * a[i - 1]
+        a.append(-1 * matrix[i][i + 1] / y)
+        b.append((matrix[i][n] - matrix[i][i - 1] * b[i - 1]) / y)
+    b.append((matrix[n-1][n] - matrix[n-1][n-2] * b[n-2]) / (matrix[n-1][n-1] + matrix[n-1][n-2] * a[n-2]))
+    x = [0 for i in range(len(matrix))]
+    x[-1] = b[-1]
+    for i in range(len(matrix)-2, -1, -1):
+        x[i] = a[i] * x[i+1] + b[i]
+    return x
 
 
 def main():
-    N = 200
-    M = 200
-    a = 0
-    alpha = 2
-    b = 20
-    t = 0
-    T = 200
-    hX = (b - a) / (M - 1)
-    hT = (T - t) / (N - 1)
-    u_tx = [[0 for i in range(M)] for j in range(N)]
-    i, j = 0, a
-    while j <= b:
-        u_tx[0][i] = start_cond(j)
-        j += hX
-        i += 1
-    i = 0
-    ind = M - 1
-    tm = t
-    while tm < T:
-        u_tx[i][ind] = border_cond_sec(tm)
-        tm += hT
-        i += 1
-    Mind = M - 1
-    curT = t
-    # for row in u_tx:
-    #     print(*row)
-    # print()
-    for ti in range(1, N):
-        tridiag = [[0 for j in range(M+1)] for _ in range(M)]
-        tridiag[0][0] = -1
-        tridiag[0][1] = 1
-        tridiag[0][M] = border_cond_first_der(curT) * hX
-        tridiag[Mind][M-2] = 0
-        tridiag[Mind][M-1] = 1
-        tridiag[Mind][M] = border_cond_sec(curT) * hX
-        for n in range(1, M - 1):
-            tridiag[n][n-1] = - (alpha ** 2) / hX ** 2 * hT
-            tridiag[n][n] = 2 * (alpha ** 2) / hX ** 2 * hT + 1
-            tridiag[n][n+1] = - (alpha ** 2) / hX ** 2 * hT
-            tridiag[n][M] = u_tx[ti - 1][n]
-        u_tx[ti] = gauss(tridiag)
-        curT += hX
-
-    # for row in u_tx:
-    #     print(*row)
-    plt.imshow(u_tx, cmap='hot', interpolation='nearest')
-    plt.show()
+    start_point = 0
+    end_point = 1
+    start_time = 1
+    end_time = 4
+    splitX = 20
+    splitT = 30
+    alpha = 0.1
+    hX = (end_point - start_point) / splitX
+    hT = (end_time - start_time) / splitT
+    U_t_x = [[0 for j in range(splitX+1)] for i in range(splitT+1)]
+    x = start_point
+    curr_time = start_time
+    for i in range(len(U_t_x[0])):
+        U_t_x[0][i] = start_cond(x)
+        x += hX
+    for i in range(len(U_t_x)):
+        U_t_x[i][splitX] = border_cond_sec(curr_time)
+        curr_time += hT
+    alphsq = alpha * alpha
+    hXsq = hX * hX
+    curr_time = start_time + hT
+    tridig = [[0 for j in range(splitX+2)] for i in range(splitX+1)]
+    tridig[0][0] = -1
+    tridig[0][1] = 1
+    tridig[0][-1] = border_cond_first_der(curr_time) * hT
+    tridig[splitX][-1] = border_cond_sec(curr_time)
+    tridig[-1][splitX - 1] = 0
+    tridig[-1][splitX] = 1
+    for i in range(1, splitX):
+        tridig[i][i-1] = 1
+        tridig[i][i] = -1 * (2 + hXsq / hT / alphsq)
+        tridig[i][i+1] = 1
+        tridig[i][-1] = -U_t_x[0][i] * hXsq / hT / alphsq
+    U_t_x[1] = progonka(tridig)
+    curr_time += hT
+    for _ in range(2, splitT+1):
+        alphsq = alpha * alpha
+        hXsq = hX * hX
+        tridig = [[0 for j in range(splitX + 2)] for i in range(splitX + 1)]
+        tridig[0][0] = -1
+        tridig[0][1] = 1
+        tridig[0][-1] = border_cond_first_der(curr_time) * hT
+        tridig[splitX][-1] = border_cond_sec(curr_time)
+        tridig[-1][splitX - 1] = 0
+        tridig[-1][splitX] = 1
+        for i in range(1, splitX):
+            tridig[i][i - 1] = 1
+            tridig[i][i] = -1 * (2 + hXsq / hT / alphsq)
+            tridig[i][i + 1] = 1
+            tridig[i][-1] = -U_t_x[_-2][i] * hXsq / hT / alphsq
+        U_t_x[_] = progonka(tridig)
+        curr_time += hT
+    wb = xl.Workbook('Answers.xls')
+    wb.create_sheet('1')
+    ws = wb['1']
+    for row in U_t_x:
+        ws.append(row)
+    wb.save('Answers.xls')
 
 
 if __name__ == '__main__':
