@@ -183,7 +183,7 @@ def main():
                      np.array([deepcopy(a[1][j]) for a in graph_coords_any]), label=f'функция {j}, h = {eps}')
         for j in range(len(functions[i])):
             plt.plot(np.array([deepcopy(a[0]) for a in graph_coords_any]),
-                     np.array([anal_functions[i][0](deepcopy(a[0])) for a in graph_coords_any]),
+                     np.array([anal_functions[i][j](deepcopy(a[0])) for a in graph_coords_any]),
                      label=f' функция {j} Точное')
         plt.legend()
         plt.show()
