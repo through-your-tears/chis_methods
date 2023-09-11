@@ -4,11 +4,13 @@ from obr_matrix import obr_matrix
 
 
 def mul_matrix(a, b):
-    length = len(a)
-    result_matrix = [[0 for i in range(length)] for i in range(length)]
-    for i in range(length):
-        for j in range(length):
-            for k in range(length):
+    n = len(a)
+    m = len(b[0])
+    p = len(a[0])
+    result_matrix = [[0 for j in range(m)] for i in range(n)]
+    for i in range(n):
+        for j in range(m):
+            for k in range(p):
                 result_matrix[i][j] += a[i][k] * b[k][j]
     return result_matrix
 

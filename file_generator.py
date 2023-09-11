@@ -1,6 +1,6 @@
 import os
 
-a = int(input('Введите номер задачи: \n'))
+a = input('Введите номер задачи: \n')
 n = int(input('Введите кол-во тестов: \n'))
 for _ in range(n):
     try:
