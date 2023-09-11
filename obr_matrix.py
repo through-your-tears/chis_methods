@@ -4,7 +4,7 @@ from copy import deepcopy
 
 
 def transpon(a):
-    return [[a[j][i] for j in range(len(a))] for i in range(len(a))]
+    return [[a[j][i] for j in range(len(a))] for i in range(len(a[0]))]
 
 
 def obr_matrix(m):

@@ -16,11 +16,11 @@ def normalize(a: list) -> list:
 
 
 def power_method(matrix):
+    n = len(matrix)
     y = [randint(0, 10000) for j in range(n)]
     x = normalize(y)
     yk = mul_matrix_on_vector(matrix, x)
     xk = normalize(yk)
-    n = len(matrix)
     lmbd = [1 for i in range(n)]
     lmbdk = [yk[i] / x[i] for i in range(n)]
     flags = [True if abs(x[i]) > DELTA else False for i in range(n)]
